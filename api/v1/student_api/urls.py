@@ -1,9 +1,8 @@
 from django.urls import path
 
-app_name ='user_api'
+app_name ='student_api'
 
 urlpatterns = [
   # path()
     
 ]
-  
