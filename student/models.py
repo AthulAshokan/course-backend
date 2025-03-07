@@ -7,3 +7,4 @@ class Student(models.Model):
     alternative_phone = models.CharField(max_length=15, blank=True, null=True)
     def __str__(self):
         return f"{self.user.name} - {self.course}"
+        
