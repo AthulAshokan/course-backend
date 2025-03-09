@@ -16,22 +16,19 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
-        if extra_fields.get('is_staff') is not True:
+        if not extra_fields.get('is_staff'):
             raise ValueError('Superuser must have is_staff=True.')
-        if extra_fields.get('is_superuser') is not True:
+        if not extra_fields.get('is_superuser'):
             raise ValueError('Superuser must have is_superuser=True.')
 
         return self.create_user(email, password, **extra_fields)
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    name = models.CharField(max_length=100)
-    username = models.CharField(max_length=100, unique=True)
-    phone = models.CharField(max_length=15, blank=True, null=True)
-    # skill = models.CharField(max_length=200, blank=True)
-    # bio = models.TextField(blank=True)
     email = models.EmailField(unique=True)
-    # phone=models.
+    username = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
+    phone = models.CharField(max_length=15, blank=True, null=True)
     date_joined = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -43,3 +40,4 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
