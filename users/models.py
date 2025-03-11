@@ -33,10 +33,13 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
+    otp = models.CharField(max_length=6, blank=True, null=True)  # Store the OTP
+    otp_created_at = models.DateTimeField(blank=True, null=True)  # Track when the OTP was 
+
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['username', 'phone']
 
     def __str__(self):
         return self.email
