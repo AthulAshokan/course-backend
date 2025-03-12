@@ -9,6 +9,8 @@ from users.models import CustomUser
 from .serializers import UserSerializer, LoginSerializer
 from datetime import datetime, timedelta
 
+from rest_framework.permissions import IsAuthenticated
+
 def send_otp_email(email, otp):
     subject = 'Your OTP for Login'
     message = f'Your OTP is: {otp}'
@@ -27,12 +29,6 @@ class RegisterUserView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework_simplejwt.tokens import RefreshToken
-from .serializers import LoginSerializer
 
 class LoginView(APIView):
     permission_classes = [AllowAny]
@@ -87,6 +83,25 @@ class OTPVerificationView(APIView):
             )
         else:
             return Response({'detail': 'Invalid or expired OTP.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+
+
+
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request):
+        serializer = UserSerializer(request.user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        
 
 
 

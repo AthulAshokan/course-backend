@@ -41,14 +41,18 @@ INSTALLED_APPS = [
     'users',
     'student',
     'instructor',
+    'courses',
 
     'api',
     'api.v1.user_api',
     'api.v1.student_api',
     'api.v1.instructor_api',
+    'api.v1.course_api',
 
     'rest_framework',
     'rest_framework_simplejwt',
+
+    
 ]
 
 REST_FRAMEWORK = {
