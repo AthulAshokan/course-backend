@@ -21,6 +21,8 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/users/', include('api.v1.user_api.urls', namespace='user_api')),
-    path('api/v1/courses/', include('api.v1.course_api.urls', namespace='couse_api')),
+    path('api/v1/courses/', include('api.v1.course_api.urls',namespace='course_api')),
 ]
 
+#  http://127.0.0.1:8000/api/v1/courses/category/create
+# 
