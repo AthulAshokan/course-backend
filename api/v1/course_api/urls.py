@@ -13,6 +13,11 @@ urlpatterns = [
     path('subcategory/list/', views.subcategory_list, name='sub-category-list'),
     path('subcategory/<int:pk>/update/', views.subcategory_update, name='sub-category-update'),
     path('subcategory/<int:pk>/delete/', views.subcategory_delete, name='sub-category-delete'),
+
+    path('course/create/', views.course_create, name='course-create'),
+    path('course/list/', views.course_list, name='course-list'),
+    path('course/<int:pk>/update/', views.course_update, name='course-update'),
+    path('course/<int:pk>/delete/', views.course_delete, name='course-delete'),
 ]
 
 

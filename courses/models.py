@@ -16,3 +16,24 @@ class SubCategory(models.Model):
 
     def __str__(self):
         return self.name
+    
+
+class Course(models.Model):
+    SKILL_LEVEL_CHOICES = [
+        ('beginner', 'Beginner'),
+        ('intermediate', 'Intermediate'),
+        ('advanced', 'Advanced'),
+    ]
+    main_category = models.ForeignKey(MainCategory, on_delete=models.CASCADE, related_name="courses")
+    sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name="courses")
+    instructor = models.CharField(max_length=255)
+    language = models.CharField(max_length=50)
+    rating = models.FloatField(default=0.0)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    discount = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
+    skill_level = models.CharField(max_length=20, choices=SKILL_LEVEL_CHOICES)
+    certificate_image = models.ImageField(upload_to="certificates/", blank=True,null=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f"{self.instructor} - {self.sub_category} ({self.skill_level})"

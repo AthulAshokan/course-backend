@@ -1,13 +1,10 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from courses.models import MainCategory
-from .serializers import MainCategorySerializer
+from courses.models import MainCategory,SubCategory,Course
+from .serializers import MainCategorySerializer,SubCategorySerializer,CourseSerializer
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
-
-from courses.models import SubCategory
-from .serializers import SubCategorySerializer
 
 #### main_category section
 #create main_category
@@ -56,8 +53,8 @@ def category_delete(request,pk):
      category.delete()
      return Response({'detail': 'Category deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 
-#### subcategory_section
 
+#### subcategory_section
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def create_subcategory(request):
@@ -103,7 +100,50 @@ def subcategory_delete(request, pk):
     subcategory.delete()
     return Response({'detail': 'Subcategory deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 
+##### course section
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def course_create(request):
+    print(request.data,"...............")
+    serializer = CourseSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def course_list(request):
+    courses = Course.objects.all()
+    serializer = CourseSerializer(courses, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['PUT'])
+@permission_classes([AllowAny])
+def course_update(request, pk):
+    print(request.data,"...............")
+    try:
+        course = Course.objects.get(pk=pk)
+    except Course.DoesNotExist:
+        return Response({'error': 'Course not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = CourseSerializer(course, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+@permission_classes([AllowAny])
+def course_delete(request, pk):
+    try:
+        course = Course.objects.get(pk=pk)
+    except Course.DoesNotExist:
+        return Response({'error': 'Course not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    course.delete()
+    return Response({'detail': 'Course deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 
 
 
