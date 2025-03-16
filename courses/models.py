@@ -37,3 +37,20 @@ class Course(models.Model):
 
     def __str__(self):
         return f"{self.instructor} - {self.sub_category} ({self.skill_level})"
+    
+    
+class Curriculum(models.Model):
+    course = models.OneToOneField(Course, on_delete=models.CASCADE, related_name="curriculum")
+    name = models.CharField(max_length=255)
+    title = models.CharField(max_length=255)
+    description = models.TextField() 
+    cover_image = models.ImageField(upload_to='curriculum_covers/', blank=True, null=True)
+    what_will_you_learn = models.TextField()
+    requirements = models.TextField(blank=True, null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+

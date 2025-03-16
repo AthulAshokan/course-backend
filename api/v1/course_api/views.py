@@ -1,8 +1,8 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from courses.models import MainCategory,SubCategory,Course
-from .serializers import MainCategorySerializer,SubCategorySerializer,CourseSerializer
+from courses.models import MainCategory,SubCategory,Course,Curriculum
+from .serializers import MainCategorySerializer,SubCategorySerializer,CourseSerializer,CurriculumSerializer
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
 
@@ -146,5 +146,19 @@ def course_delete(request, pk):
     return Response({'detail': 'Course deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 
 
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def chapter_create(request):
+    print(request.data,"...............")
+    serializer = CurriculumSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def chapter_list(request):
+    curriculums = Curriculum.objects.all()    
+    serializer = CurriculumSerializer(curriculums, many=True)    
+    return Response(serializer.data, status=status.HTTP_200_OK)
