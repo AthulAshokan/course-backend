@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from courses.models import MainCategory, SubCategory,Course,Curriculum
+from courses.models import MainCategory, SubCategory,Course,Curriculum,Module
 
 class MainCategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -25,13 +25,19 @@ class CourseSerializer(serializers.ModelSerializer):
         fields = [  'id', 'price', 'skill_level', 'instructor','language', 'rating', 'certificate_image',
                    'is_active','main_category', 'sub_category']
 
-
 class CurriculumSerializer(serializers.ModelSerializer):
-    course = CourseSerializer(read_only=True)
-  
+    course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all())
+
     class Meta:
         model = Curriculum
-        fields = ['id', 'name', 'title', 'description', 'cover_image', 'what_will_you_learn', 'requirements', 'course']
+        fields = "__all__"
+
+class Moduleserializer(serializers.ModelSerializer):
+    Curriculum = CurriculumSerializer(read_only=True)
+
+    class Meta:
+        model = Module
+        fields = ['id', 'module_name', 'title', 'description', 'video_url', 'video_title', 'video_description', 'notes', 'notes_title', 'image', 'is_free', 'Curriculum']
   
       
 

@@ -54,3 +54,26 @@ class Curriculum(models.Model):
     def __str__(self):
         return self.name
 
+
+class Module(models.Model):
+    curriculum = models.ForeignKey(Curriculum, on_delete=models.CASCADE, related_name="modules")  
+    module_name = models.CharField(max_length=255)  
+    title = models.CharField(max_length=255) 
+    description = models.TextField() 
+    
+    video_url = models.URLField(blank=True, null=True)  
+    video_title = models.CharField(max_length=255, blank=True, null=True)  
+    video_description = models.TextField(blank=True, null=True)  
+    
+    notes = models.TextField(blank=True, null=True)  
+    notes_title = models.CharField(max_length=255, blank=True, null=True)  
+    
+    image = models.ImageField(upload_to='module_images/', blank=True, null=True)  
+    is_free = models.BooleanField(default=False)  
+
+    created_at = models.DateTimeField(auto_now_add=True) 
+    updated_at = models.DateTimeField(auto_now=True)  
+
+    def __str__(self):
+        return self.module_name
+

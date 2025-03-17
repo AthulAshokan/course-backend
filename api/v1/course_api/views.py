@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from courses.models import MainCategory,SubCategory,Course,Curriculum
-from .serializers import MainCategorySerializer,SubCategorySerializer,CourseSerializer,CurriculumSerializer
+from .serializers import MainCategorySerializer,SubCategorySerializer,CourseSerializer,CurriculumSerializer,Moduleserializer
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
 
@@ -162,3 +162,41 @@ def chapter_list(request):
     curriculums = Curriculum.objects.all()    
     serializer = CurriculumSerializer(curriculums, many=True)    
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['PUT'])
+@permission_classes([AllowAny])
+def chapter_update(request, pk):
+    print(request.data,"...............")
+    try:
+        curriculum = Curriculum.objects.get(pk=pk)
+    except Curriculum.DoesNotExist:
+        return Response({'error': 'Curriculum not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = CurriculumSerializer(curriculum, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+@permission_classes([AllowAny])
+def chapter_delete(request, pk):
+    try:    
+        curriculum = Curriculum.objects.get(pk=pk)
+    except Curriculum.DoesNotExist:    
+        return Response({'error': 'Curriculum not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    curriculum.delete()    
+    return Response({'detail': 'Curriculum deleted successfully'}, status=status.HTTP_204_NO_CONTENT)       
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def module_create(request):
+    print(request.data,"...............")
+    serializer = Moduleserializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

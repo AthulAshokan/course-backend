@@ -23,6 +23,8 @@ urlpatterns = [
     path('chapter/list/', views.chapter_list, name='chapter-list'),
     path('chapter/<int:pk>/update/', views.chapter_update, name='chapter-update'),
     path('chapter/<int:pk>/delete/', views.chapter_delete, name='chapter-delete'),
+
+    path('module/create/', views.module_create, name='module-create'),
 ]
 
 
